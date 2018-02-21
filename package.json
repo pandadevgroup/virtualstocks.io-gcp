@@ -12,9 +12,7 @@
     "url": "https://github.com/virtualstocks/virtualstocks.io-heroku"
   },
   "dependencies": {
-    "typescript": "^2.7.2"
-  },
-  "devDependencies": {
+    "typescript": "^2.7.2",
     "@types/node": "^9.4.6"
   }
 }
