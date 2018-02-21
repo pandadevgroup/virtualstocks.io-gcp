@@ -1,5 +1,6 @@
 import { key } from "./util/firebase-key";
 import { Orders, Order, OrderData } from "./util/orders";
+import { StockChange } from "./util/stocks-watcher";
 import * as admin from "firebase-admin";
 
 admin.initializeApp({
@@ -8,6 +9,11 @@ admin.initializeApp({
 
 const db = admin.firestore();
 const orders = new Orders();
+
+orders.listen((order: Order, change: StockChange) => {
+	console.log(`Stock Update: ${change}`);
+	orders.removeOrder(order);
+});
 
 db.collection("orders").where("fulfilled", "==", false).onSnapshot(snapshot => {
 	console.log("==== NEW SNAPSHOT ====");

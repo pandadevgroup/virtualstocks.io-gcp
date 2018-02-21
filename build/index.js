@@ -8,6 +8,10 @@ admin.initializeApp({
 });
 const db = admin.firestore();
 const orders = new orders_1.Orders();
+orders.listen((order, change) => {
+    console.log(`Stock Update: ${change}`);
+    orders.removeOrder(order);
+});
 db.collection("orders").where("fulfilled", "==", false).onSnapshot(snapshot => {
     console.log("==== NEW SNAPSHOT ====");
     snapshot.docChanges.forEach(change => {

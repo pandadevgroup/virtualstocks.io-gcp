@@ -9,6 +9,7 @@ export abstract class OrderData {
 	error: string | null;
 	fulfilled: boolean;
 	type: "buy" | "sell" | "short" | "limit";
+	price: number | null;
 }
 
 export class Order extends OrderData {
@@ -35,12 +36,13 @@ export class Orders {
 			[id: string]: Order
 		}
 	} = {};
+	private callbacks: Function[] = [];
 	private stocksWatcher: StocksWatcher;
 
 	constructor() {
 		this.stocksWatcher = new StocksWatcher();
 		this.stocksWatcher.onChange((change: StockChange) => {
-			console.log(change.toString());
+			this.handleStockUpdate(change);
 		});
 	}
 
@@ -63,6 +65,10 @@ export class Orders {
 		if (Object.keys(this.orders[ticker]).length === 0) this.removeTicker(ticker);
 	}
 
+	listen(callback: Function) {
+		this.callbacks.push(callback);
+	}
+
 	private initializeTicker(ticker: string) {
 		this.orders[ticker] = {};
 		this.stocksWatcher.watch(ticker);
@@ -71,5 +77,26 @@ export class Orders {
 	private removeTicker(ticker: string) {
 		delete this.orders[ticker];
 		this.stocksWatcher.stop(ticker);
+	}
+
+	private handleStockUpdate(change: StockChange) {
+		const { ticker } = change;
+		const orders = this.orders[ticker];
+
+		for (let orderId of Object.keys(orders)) {
+			this.checkOrder(orders[orderId], change);
+		}
+	}
+
+	private checkOrder(order: Order, change: StockChange) {
+		const { type, price } = order;
+
+		if (type === "buy") {
+			this.notifyListeners(order, change);
+		}
+	}
+
+	private notifyListeners(order: Order, change: StockChange) {
+		this.callbacks.map(callback => callback(order, change));
 	}
 }

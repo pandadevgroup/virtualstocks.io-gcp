@@ -22,9 +22,10 @@ exports.Order = Order;
 class Orders {
     constructor() {
         this.orders = {};
+        this.callbacks = [];
         this.stocksWatcher = new stocks_watcher_1.StocksWatcher();
         this.stocksWatcher.onChange((change) => {
-            console.log(change.toString());
+            this.handleStockUpdate(change);
         });
     }
     addOrder(order) {
@@ -43,6 +44,9 @@ class Orders {
         if (Object.keys(this.orders[ticker]).length === 0)
             this.removeTicker(ticker);
     }
+    listen(callback) {
+        this.callbacks.push(callback);
+    }
     initializeTicker(ticker) {
         this.orders[ticker] = {};
         this.stocksWatcher.watch(ticker);
@@ -50,6 +54,22 @@ class Orders {
     removeTicker(ticker) {
         delete this.orders[ticker];
         this.stocksWatcher.stop(ticker);
+    }
+    handleStockUpdate(change) {
+        const { ticker } = change;
+        const orders = this.orders[ticker];
+        for (let orderId of Object.keys(orders)) {
+            this.checkOrder(orders[orderId], change);
+        }
+    }
+    checkOrder(order, change) {
+        const { type, price } = order;
+        if (type === "buy") {
+            this.notifyListeners(order, change);
+        }
+    }
+    notifyListeners(order, change) {
+        this.callbacks.map(callback => callback(order, change));
     }
 }
 exports.Orders = Orders;
