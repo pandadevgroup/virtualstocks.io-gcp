@@ -43,10 +43,14 @@ export class Orders {
 	}
 
 	updateOrder(order: Order) {
-		// TODO
+		const { ticker, id } = order;
+		this.orders[ticker][id] = order;
 	}
 
 	removeOrder(order: Order) {
-		// TODO
+		const { ticker, id } = order;
+		delete this.orders[ticker][id];
+		
+		if (Object.keys(this.orders[ticker]).length === 0) delete this.orders[ticker];
 	}
 }

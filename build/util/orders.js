@@ -6,7 +6,12 @@ exports.OrderData = OrderData;
 class Order extends OrderData {
     constructor(data) {
         super();
-        Object.assign(this, data);
+        if (data instanceof OrderData) {
+            return Object.assign(this, data);
+        }
+        else {
+            return Object.assign(this, Object.assign({ id: data.id }, data.data()));
+        }
     }
     toString() {
         return `${this.id} => ${this.type} ${this.ticker} x${this.quantity}`;
