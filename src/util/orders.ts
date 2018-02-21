@@ -35,10 +35,12 @@ export class Orders {
 			[id: string]: Order
 		}
 	} = {};
+	private stocksWatcher: StocksWatcher;
 
-	constructor(private stocksWatcher: StocksWatcher) {
+	constructor() {
+		this.stocksWatcher = new StocksWatcher();
 		this.stocksWatcher.onChange((change: StockChange) => {
-			console.log(change);
+			console.log(change.toString());
 		});
 	}
 

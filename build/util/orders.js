@@ -1,5 +1,6 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
+const stocks_watcher_1 = require("./stocks-watcher");
 class OrderData {
 }
 exports.OrderData = OrderData;
@@ -21,11 +22,15 @@ exports.Order = Order;
 class Orders {
     constructor() {
         this.orders = {};
+        this.stocksWatcher = new stocks_watcher_1.StocksWatcher();
+        this.stocksWatcher.onChange((change) => {
+            console.log(change.toString());
+        });
     }
     addOrder(order) {
         const { ticker, id } = order;
         if (!this.orders[ticker])
-            this.orders[ticker] = {};
+            this.initializeTicker(ticker);
         this.orders[ticker][id] = order;
     }
     updateOrder(order) {
@@ -36,7 +41,15 @@ class Orders {
         const { ticker, id } = order;
         delete this.orders[ticker][id];
         if (Object.keys(this.orders[ticker]).length === 0)
-            delete this.orders[ticker];
+            this.removeTicker(ticker);
+    }
+    initializeTicker(ticker) {
+        this.orders[ticker] = {};
+        this.stocksWatcher.watch(ticker);
+    }
+    removeTicker(ticker) {
+        delete this.orders[ticker];
+        this.stocksWatcher.stop(ticker);
     }
 }
 exports.Orders = Orders;
