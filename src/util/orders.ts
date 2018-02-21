@@ -1,4 +1,5 @@
 import { QueryDocumentSnapshot } from "@google-cloud/firestore";
+import { StocksWatcher, StockChange } from "./stocks-watcher";
 
 export abstract class OrderData {
 	id: string;
@@ -35,9 +36,15 @@ export class Orders {
 		}
 	} = {};
 
+	constructor(private stocksWatcher: StocksWatcher) {
+		this.stocksWatcher.onChange((change: StockChange) => {
+			console.log(change);
+		});
+	}
+
 	addOrder(order: Order) {
 		const { ticker, id } = order;
-		if (!this.orders[ticker]) this.orders[ticker] = {};
+		if (!this.orders[ticker]) this.initializeTicker(ticker);
 
 		this.orders[ticker][id] = order;
 	}
@@ -51,6 +58,16 @@ export class Orders {
 		const { ticker, id } = order;
 		delete this.orders[ticker][id];
 		
-		if (Object.keys(this.orders[ticker]).length === 0) delete this.orders[ticker];
+		if (Object.keys(this.orders[ticker]).length === 0) this.removeTicker(ticker);
+	}
+
+	private initializeTicker(ticker: string) {
+		this.orders[ticker] = {};
+		this.stocksWatcher.watch(ticker);
+	}
+
+	private removeTicker(ticker: string) {
+		delete this.orders[ticker];
+		this.stocksWatcher.stop(ticker);
 	}
 }

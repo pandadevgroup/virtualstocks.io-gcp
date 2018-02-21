@@ -29,10 +29,14 @@ class Orders {
         this.orders[ticker][id] = order;
     }
     updateOrder(order) {
-        // TODO
+        const { ticker, id } = order;
+        this.orders[ticker][id] = order;
     }
     removeOrder(order) {
-        // TODO
+        const { ticker, id } = order;
+        delete this.orders[ticker][id];
+        if (Object.keys(this.orders[ticker]).length === 0)
+            delete this.orders[ticker];
     }
 }
 exports.Orders = Orders;
