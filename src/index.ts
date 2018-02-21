@@ -12,7 +12,7 @@ const orders = new Orders();
 db.collection("orders").where("fulfilled", "==", false).onSnapshot(snapshot => {
 	console.log("==== NEW SNAPSHOT ====");
 	snapshot.docChanges.forEach(change => {
-		const order = new Order(change.doc.data() as OrderData);
+		const order = new Order(change.doc);
 		if (change.type === "added") {
 			orders.addOrder(order);
 			console.log(`New order: ${order}`);

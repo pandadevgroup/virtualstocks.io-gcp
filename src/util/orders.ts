@@ -1,3 +1,5 @@
+import { QueryDocumentSnapshot } from "@google-cloud/firestore";
+
 export abstract class OrderData {
 	id: string;
 	uid: string;
@@ -9,9 +11,16 @@ export abstract class OrderData {
 }
 
 export class Order extends OrderData {
-	constructor(data: OrderData) {
+	constructor(data: OrderData | QueryDocumentSnapshot) {
 		super();
-		Object.assign(this, data);
+		if (data instanceof OrderData) {
+			return Object.assign(this, data);
+		} else {
+			return Object.assign(this, {
+				id: data.id,
+				...data.data()
+			});
+		}
 	}
 
 	toString() {
