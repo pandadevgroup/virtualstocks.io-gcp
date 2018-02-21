@@ -1,11 +1,22 @@
-export interface Order {
+export abstract class OrderData {
 	id: string;
-	uid: string,
-	ticker: string,
-	quantity: number,
-	error: string | null,
-	fulfilled: boolean,
-	type: "buy" | "sell" | "short" | "limit"
+	uid: string;
+	ticker: string;
+	quantity: number;
+	error: string | null;
+	fulfilled: boolean;
+	type: "buy" | "sell" | "short" | "limit";
+}
+
+export class Order extends OrderData {
+	constructor(data: OrderData) {
+		super();
+		Object.assign(this, data);
+	}
+
+	toString() {
+		return `${this.id} => ${this.type} ${this.ticker} x${this.quantity}`;
+	}
 }
 
 export class Orders {
@@ -20,5 +31,13 @@ export class Orders {
 		if (!this.orders[ticker]) this.orders[ticker] = {};
 
 		this.orders[ticker][id] = order;
+	}
+
+	updateOrder(order: Order) {
+		// TODO
+	}
+
+	removeOrder(order: Order) {
+		// TODO
 	}
 }
