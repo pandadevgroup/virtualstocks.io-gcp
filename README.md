@@ -10,4 +10,6 @@ However, for Heroku, simply run:
 heroku config:set FIREBASE_KEY="$(cat keys/firebase.json)"
 ```
 
+*Make sure everything in that file is on the first line.*
+
 See here for more details: https://firebase.google.com/docs/firestore/quickstart
