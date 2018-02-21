@@ -1,4 +1,5 @@
 import { key } from "./util/firebase-key";
+import { Orders } from "./util/orders";
 import * as admin from "firebase-admin";
 
 admin.initializeApp({
@@ -6,12 +7,18 @@ admin.initializeApp({
 });
 
 const db = admin.firestore();
+const orders = new Orders();
 
 db.collection("orders").where("fulfilled", "==", false).onSnapshot(snapshot => {
 	console.log("==== NEW SNAPSHOT ====");
 	snapshot.docChanges.forEach(change => {
 		if (change.type === "added") {
-			console.log("New order: ", change.doc.data());
+			const id = change.doc.id;
+			const order: any = change.doc.data();
+			const ticker = order.ticker;
+			orders.addOrder(order);
+
+			console.log(`New order: ${id} => ${order.type} ${order.ticker} x${order.quantity}`);
 		}
 		if (change.type === "modified") {
 			console.log("Modified order: ", change.doc.data());
