@@ -1,4 +1,11 @@
-console.log("hello");
+import * as fs from "fs";
+
+const keyfileExists = fs.existsSync("keys/firebase.json");
+const key = keyfileExists
+	? fs.readFileSync("keys/firebase.json").toString()
+	: process.env.FIREBASE_KEY;
+
+console.log(key);
 
 setInterval(() => console.log(new Date().toString()), 1000);
 
