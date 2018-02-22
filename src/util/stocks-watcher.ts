@@ -57,7 +57,7 @@ export class StocksWatcher {
 	private checkSocket() {
 		const date = new Date();
 		const dayOfWeek = date.getDay();
-		const hour = date.getUTCHours() + 1;
+		const hour = date.getUTCHours();
 		const minutes = date.getUTCMinutes();
 		// Only open Monday thru Friday (1 through 5)
 		if (dayOfWeek === 0 || dayOfWeek === 6) return;
