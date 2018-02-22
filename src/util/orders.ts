@@ -10,6 +10,7 @@ export abstract class OrderData {
 	fulfilled: boolean;
 	type: "buy" | "sell" | "short" | "limit";
 	price: number | null;
+	limitPrice: number | null;
 }
 
 export class Order extends OrderData {
@@ -90,10 +91,15 @@ export class Orders {
 	}
 
 	private checkOrder(order: Order, change: StockChange) {
-		const { type, price } = order;
+		const { type } = order;
 
-		if (type === "buy") {
+		if (type === "buy" || type === "sell" || type === "short") {
 			this.notifyListeners(order, change);
+		} else if (type === "limit") {
+			const { limitPrice } = order;
+			if (change.price <= limitPrice) {
+				this.notifyListeners(order, change);
+			}
 		}
 	}
 

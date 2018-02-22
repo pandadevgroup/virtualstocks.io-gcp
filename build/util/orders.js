@@ -66,9 +66,15 @@ class Orders {
         }
     }
     checkOrder(order, change) {
-        const { type, price } = order;
-        if (type === "buy") {
+        const { type } = order;
+        if (type === "buy" || type === "sell" || type === "short") {
             this.notifyListeners(order, change);
+        }
+        else if (type === "limit") {
+            const { limitPrice } = order;
+            if (change.price <= limitPrice) {
+                this.notifyListeners(order, change);
+            }
         }
     }
     notifyListeners(order, change) {
