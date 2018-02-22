@@ -43,10 +43,12 @@ export class StocksWatcher {
 	}
 
 	watch(ticker: string) {
+		console.log(`[Stocks Watcher] Watching ${ticker}`);
 		this.socket.emit("subscribe", ticker);
 	}
 
 	stop(ticker: string) {
+		console.log(`[Stocks Watcher] Stopping ${ticker}`);
 		this.socket.emit("unsubscribe", ticker);
 	}
 
