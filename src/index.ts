@@ -18,7 +18,7 @@ orders.listen((order: Order, change: StockChange) => {
 		method: "POST",
 		json: true,
 		body: {
-			orderId: order.id,
+			order: order,
 			price: change.price,
 			timestamp: change.time
 		}
