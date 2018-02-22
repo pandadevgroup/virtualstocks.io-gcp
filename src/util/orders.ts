@@ -60,7 +60,8 @@ export class Orders {
 
 	removeOrder(order: Order) {
 		const { ticker, id } = order;
-		delete this.orders[ticker][id];
+		if (!this.orders[ticker]) return;
+		if (this.orders[ticker].hasOwnProperty(id)) delete this.orders[ticker][id];
 		
 		if (Object.keys(this.orders[ticker]).length === 0) this.removeTicker(ticker);
 	}

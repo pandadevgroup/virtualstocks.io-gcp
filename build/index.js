@@ -12,7 +12,7 @@ const orders = new orders_1.Orders();
 orders.listen((order, change) => {
     console.log(`Stock Update: ${change}`);
     request({
-        url: "https://us-central1-virtualstocks-io.cloudfunctions.net/orders/updatde",
+        url: "https://us-central1-virtualstocks-io.cloudfunctions.net/orders/update",
         method: "POST",
         json: true,
         body: {
