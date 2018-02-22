@@ -62,12 +62,12 @@ export class StocksWatcher {
 		if (dayOfWeek === 0 || dayOfWeek === 6) return;
 
 		// Opens 2:30 PM, closes 9 PM
-		if (hour == 2) {
+		if (hour == 14) {
 			if (minutes >= 29 && !this.socketOpen) {
 				// Past 2:29, start trading
 				this.socket.open();
 			}
-		} else if (hour == 9 && this.socketOpen) {
+		} else if (hour == 21 && this.socketOpen) {
 			// It's 9, stop trading
 			this.socket.close();
 		}
