@@ -52,6 +52,7 @@ export class Orders {
 		if (!this.orders[ticker]) this.initializeTicker(ticker);
 
 		this.orders[ticker][id] = order;
+		this.stocksWatcher.watch(ticker);
 	}
 
 	updateOrder(order: Order) {
@@ -64,7 +65,10 @@ export class Orders {
 		if (!this.orders[ticker]) return;
 		if (this.orders[ticker].hasOwnProperty(id)) delete this.orders[ticker][id];
 		
-		if (Object.keys(this.orders[ticker]).length === 0) this.removeTicker(ticker);
+		if (Object.keys(this.orders[ticker]).length === 0) {
+			this.removeTicker(ticker);
+			this.stocksWatcher.stop(ticker);
+		}
 	}
 
 	listen(callback: Function) {
@@ -73,12 +77,10 @@ export class Orders {
 
 	private initializeTicker(ticker: string) {
 		this.orders[ticker] = {};
-		this.stocksWatcher.watch(ticker);
 	}
 
 	private removeTicker(ticker: string) {
 		delete this.orders[ticker];
-		this.stocksWatcher.stop(ticker);
 	}
 
 	private handleStockUpdate(change: StockChange) {

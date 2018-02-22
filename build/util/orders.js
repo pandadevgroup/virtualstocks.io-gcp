@@ -33,6 +33,7 @@ class Orders {
         if (!this.orders[ticker])
             this.initializeTicker(ticker);
         this.orders[ticker][id] = order;
+        this.stocksWatcher.watch(ticker);
     }
     updateOrder(order) {
         const { ticker, id } = order;
@@ -44,23 +45,25 @@ class Orders {
             return;
         if (this.orders[ticker].hasOwnProperty(id))
             delete this.orders[ticker][id];
-        if (Object.keys(this.orders[ticker]).length === 0)
+        if (Object.keys(this.orders[ticker]).length === 0) {
             this.removeTicker(ticker);
+            this.stocksWatcher.stop(ticker);
+        }
     }
     listen(callback) {
         this.callbacks.push(callback);
     }
     initializeTicker(ticker) {
         this.orders[ticker] = {};
-        this.stocksWatcher.watch(ticker);
     }
     removeTicker(ticker) {
         delete this.orders[ticker];
-        this.stocksWatcher.stop(ticker);
     }
     handleStockUpdate(change) {
         const { ticker } = change;
         const orders = this.orders[ticker];
+        if (!orders)
+            return;
         for (let orderId of Object.keys(orders)) {
             this.checkOrder(orders[orderId], change);
         }
