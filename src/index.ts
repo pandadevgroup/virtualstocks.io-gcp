@@ -2,6 +2,7 @@ import { key } from "./util/firebase-key";
 import { Orders, Order, OrderData } from "./util/orders";
 import { StockChange } from "./util/stocks-watcher";
 import * as admin from "firebase-admin";
+import * as request from "request";
 
 admin.initializeApp({
 	credential: admin.credential.cert(JSON.parse(key))
@@ -12,6 +13,22 @@ const orders = new Orders();
 
 orders.listen((order: Order, change: StockChange) => {
 	console.log(`Stock Update: ${change}`);
+	request({
+		url: "https://us-central1-virtualstocks-io.cloudfunctions.net/orders/update",
+		method: "POST",
+		json: true,
+		body: {
+			orderId: order.id,
+			price: change.price,
+			timestamp: change.time
+		}
+	}, ((error, response, body) => {
+		if (error) {
+			console.error(`[Stock Update] Error: `, error);
+		} else {
+			console.log(`[Stock Update] Response from firebase: `, body);
+		}
+	}));
 	orders.removeOrder(order);
 });
 
