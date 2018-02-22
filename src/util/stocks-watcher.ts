@@ -67,7 +67,9 @@ export class StocksWatcher {
 				// Past 2:29, start trading
 				this.socket.open();
 			}
-		} else if (hour == 21 && this.socketOpen) {
+		} else if (hour > 14 && hour < 21) {
+			if (!this.socketOpen) this.socket.open();
+		} else if (hour >= 21 && this.socketOpen) {
 			// It's 9, stop trading
 			this.socket.close();
 		}
