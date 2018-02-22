@@ -84,6 +84,7 @@ export class Orders {
 	private handleStockUpdate(change: StockChange) {
 		const { ticker } = change;
 		const orders = this.orders[ticker];
+		if (!orders) return;
 
 		for (let orderId of Object.keys(orders)) {
 			this.checkOrder(orders[orderId], change);
