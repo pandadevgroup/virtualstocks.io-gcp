@@ -35,6 +35,7 @@ export class StocksWatcher {
 		this.socket.on('disconnect', () => {
 			this.socketOpen = false;
 			console.log('[Stocks Watcher] Disconnected from ws-api.iextrading.com.');
+			this.checkSocket();
 		});
 
 		this.checkSocket();
