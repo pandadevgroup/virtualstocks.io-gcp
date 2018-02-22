@@ -61,7 +61,7 @@ export class StocksWatcher {
 		// Only open Monday thru Friday (1 through 5)
 		if (dayOfWeek === 0 || dayOfWeek === 6) return;
 
-		// Opens 2:30 PM, closes 9 PM
+		// Opens 2:30 PM, closes 9 PM UTC
 		if (hour == 14) {
 			if (minutes >= 29 && !this.socketOpen) {
 				// Past 2:29, start trading
