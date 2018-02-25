@@ -53,6 +53,7 @@ export class Orders {
 
 		this.orders[ticker][id] = order;
 		this.stocksWatcher.watch(ticker);
+		this.stocksWatcher.checkStock(ticker);
 	}
 
 	updateOrder(order: Order) {

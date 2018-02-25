@@ -34,6 +34,7 @@ class Orders {
             this.initializeTicker(ticker);
         this.orders[ticker][id] = order;
         this.stocksWatcher.watch(ticker);
+        this.stocksWatcher.checkStock(ticker);
     }
     updateOrder(order) {
         const { ticker, id } = order;

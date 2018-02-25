@@ -1,4 +1,5 @@
 import * as socketIOClient from "socket.io-client";
+import * as request from "request";
 
 export class StockChange {
 	ticker: string;
@@ -54,6 +55,21 @@ export class StocksWatcher {
 
 	onChange(callback: Function) {
 		this.callbacks.push(callback);
+	}
+
+	checkStock(ticker: string) {
+		request(
+			`https://api.iextrading.com/1.0/stock/${ticker}/quote?filter=latestPrice,latestUpdate`,
+			{ json: true },
+			(error, res, body) => {
+				if (error) { return console.error(`[Stocks Watcher] checkStock error: `, error); }
+				this.handleMessage({
+					symbol: ticker,
+					price: body.latestPrice,
+					time: body.latestUpdate
+				});
+			}
+		);
 	}
 
 	private checkSocket() {

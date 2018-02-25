@@ -1,6 +1,7 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 const socketIOClient = require("socket.io-client");
+const request = require("request");
 class StockChange {
     constructor(data) {
         return Object.assign(this, data);
@@ -41,6 +42,19 @@ class StocksWatcher {
     }
     onChange(callback) {
         this.callbacks.push(callback);
+    }
+    checkStock(ticker) {
+        request(`https://api.iextrading.com/1.0/stock/${ticker}/quote?filter=latestPrice,latestUpdate`, { json: true }, (error, res, body) => {
+            if (error) {
+                return console.error(`[Stocks Watcher] checkStock error: `, error);
+            }
+            console.log(body);
+            this.handleMessage({
+                symbol: ticker,
+                price: body.latestPrice,
+                time: body.latestUpdate
+            });
+        });
     }
     checkSocket() {
         if (!this.socketOpen)
