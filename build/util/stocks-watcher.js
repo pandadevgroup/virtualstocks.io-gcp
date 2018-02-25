@@ -66,7 +66,6 @@ class StocksWatcher {
     }
     handleMessage(message) {
         const { symbol: ticker, price, time } = message;
-        console.log(message);
         this.callbacks.map(callback => callback(new StockChange({
             ticker, price, time
         })));

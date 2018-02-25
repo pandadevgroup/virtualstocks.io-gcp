@@ -30,7 +30,7 @@ orders.listen((order, change) => {
     }));
     orders.removeOrder(order);
 });
-db.collection("orders").where("fulfilled", "==", false).onSnapshot(snapshot => {
+db.collection("transactions").where("fulfilled", "==", false).onSnapshot(snapshot => {
     console.log("==== NEW SNAPSHOT ====");
     snapshot.docChanges.forEach(change => {
         const order = new orders_1.Order(change.doc);
