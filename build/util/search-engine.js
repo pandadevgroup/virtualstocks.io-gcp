@@ -1,49 +1,31 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 const Fuse = require("fuse.js");
-let symbols = [
-    {
-        "symbol": "A",
-        "name": "AGILENT TECHNOLOGIES INC",
-        "date": "2017-04-19",
-        "isEnabled": true
-    },
-    {
-        "symbol": "AA",
-        "name": "ALCOA CORP",
-        "date": "2017-04-19",
-        "isEnabled": true
-    },
-    {
-        "symbol": "AMZN",
-        "name": "AMAZON INC",
-        "date": "2017-04-19",
-        "isEnabled": true
-    },
-    {
-        "symbol": "AMPN",
-        "name": "Google AMAZON dINC",
-        "date": "2017-04-19",
-        "isEnabled": true
-    }
-];
-var options = {
-    shouldSort: true,
-    threshold: 0,
-    location: 0,
-    distance: 0,
-    maxPatternLength: 32,
-    minMatchCharLength: 1,
-    keys: [
-        "symbol",
-        "name"
-    ]
-};
-var fuse = new Fuse(symbols, options); // "list" is the item array
-var result = fuse.search("Ama");
-console.log(result);
+const request = require("request");
 class SearchEngine {
-    start() { }
+    start() {
+        this.setupSearch();
+    }
+    setupSearch() {
+        request("https://api.iextrading.com/1.0/ref-data/symbols", { json: true }, (error, res, body) => {
+            if (error)
+                return console.error(`[Search Engine] setupSearch error: `, error);
+            this.setupFuse(body);
+        });
+    }
+    setupFuse(symbols) {
+        let options = {
+            shouldSort: true,
+            threshold: 0.1,
+            location: 0,
+            distance: 400,
+            maxPatternLength: 32,
+            minMatchCharLength: 1,
+            keys: ["symbol", "name"]
+        };
+        this.fuse = new Fuse(symbols, options);
+        console.log(`[Search Engine] Fuse ready. ${symbols.length} symbols loaded.`);
+    }
 }
 exports.SearchEngine = SearchEngine;
 //# sourceMappingURL=search-engine.js.map
