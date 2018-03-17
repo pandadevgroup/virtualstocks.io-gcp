@@ -38,7 +38,12 @@ export class SearchEngine {
 	private setupServer() {
 		const app = express();
 
-		app.get("/search/:search", (req, res) => res.send('Hello World! You said ' + req.params.search));
+		app.get("/search/:search", (req, res) => {
+			const search = req.params.search;
+			const limit = req.query.limit || 5;
+			const results = this.fuse.search(search);
+			res.send(results.slice(0, limit));
+		});
 		
 		app.listen(3000, () => console.log("[Search Engine] Listening on port 3000"));
 	}
