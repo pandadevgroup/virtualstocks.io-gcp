@@ -1,11 +1,13 @@
 import * as Fuse from "fuse.js";
 import * as request from "request";
+import * as express from "express";
 
 export class SearchEngine {
 	fuse: Fuse;
 
 	start() {
 		this.setupSearch();
+		this.setupServer();
 	}
 
 	private setupSearch() {
@@ -31,5 +33,13 @@ export class SearchEngine {
 		};
 		this.fuse = new Fuse(symbols, options);
 		console.log(`[Search Engine] Fuse ready. ${symbols.length} symbols loaded.`);
+	}
+
+	private setupServer() {
+		const app = express();
+
+		app.get("/search/:search", (req, res) => res.send('Hello World! You said ' + req.params.search));
+		
+		app.listen(3000, () => console.log("[Search Engine] Listening on port 3000"));
 	}
 }
