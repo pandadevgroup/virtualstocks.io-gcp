@@ -36,7 +36,7 @@ class SearchEngine {
             const results = this.fuse.search(search);
             res.send(results.slice(0, limit));
         });
-        app.listen(3000, () => console.log("[Search Engine] Listening on port 3000"));
+        app.listen(80, () => console.log("[Search Engine] Listening on port 80"));
     }
 }
 exports.SearchEngine = SearchEngine;
