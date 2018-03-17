@@ -37,6 +37,7 @@ export class SearchEngine {
 
 	private setupServer() {
 		const app = express();
+		app.set("port", (process.env.PORT || 3000));
 
 		app.get("/search/:search", (req, res) => {
 			const search = req.params.search;
@@ -45,6 +46,6 @@ export class SearchEngine {
 			res.send(results.slice(0, limit));
 		});
 		
-		app.listen(80, () => console.log("[Search Engine] Listening on port 80"));
+		app.listen(app.get("port"), () => console.log(`[Search Engine] Server listening on port ${app.get("port")}`));
 	}
 }
