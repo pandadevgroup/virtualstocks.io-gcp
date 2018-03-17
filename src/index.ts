@@ -1,6 +1,7 @@
 import { key } from "./util/firebase-key";
 import { Orders, Order, OrderData } from "./util/orders";
 import { StockChange } from "./util/stocks-watcher";
+import { SearchEngine } from "./util/search-engine";
 import * as admin from "firebase-admin";
 import * as request from "request";
 
@@ -10,6 +11,7 @@ admin.initializeApp({
 
 const db = admin.firestore();
 const orders = new Orders();
+const searchEngine = new SearchEngine();
 
 orders.listen((order: Order, change: StockChange) => {
 	console.log(`Stock Update: ${change}`);
@@ -50,6 +52,8 @@ db.collection("transactions").where("fulfilled", "==", false).onSnapshot(snapsho
 		}
 	});
 });
+
+searchEngine.start();
 
 process.on("SIGINT", shutdown);
 process.on("SIGTERM", shutdown);

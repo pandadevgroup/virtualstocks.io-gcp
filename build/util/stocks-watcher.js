@@ -48,7 +48,6 @@ class StocksWatcher {
             if (error) {
                 return console.error(`[Stocks Watcher] checkStock error: `, error);
             }
-            console.log(body);
             this.handleMessage({
                 symbol: ticker,
                 price: body.latestPrice,

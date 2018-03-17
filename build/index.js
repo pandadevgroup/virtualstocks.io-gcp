@@ -2,6 +2,7 @@
 Object.defineProperty(exports, "__esModule", { value: true });
 const firebase_key_1 = require("./util/firebase-key");
 const orders_1 = require("./util/orders");
+const search_engine_1 = require("./util/search-engine");
 const admin = require("firebase-admin");
 const request = require("request");
 admin.initializeApp({
@@ -9,6 +10,7 @@ admin.initializeApp({
 });
 const db = admin.firestore();
 const orders = new orders_1.Orders();
+const searchEngine = new search_engine_1.SearchEngine();
 orders.listen((order, change) => {
     console.log(`Stock Update: ${change}`);
     request({
@@ -48,6 +50,7 @@ db.collection("transactions").where("fulfilled", "==", false).onSnapshot(snapsho
         }
     });
 });
+searchEngine.start();
 process.on("SIGINT", shutdown);
 process.on("SIGTERM", shutdown);
 function shutdown() {
