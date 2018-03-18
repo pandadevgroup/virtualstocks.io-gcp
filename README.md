@@ -51,3 +51,21 @@ Make sure to replace the docker registry URL with the appropriate command.
 Copy to /etc/systemd/system. Start with systemctl start virtualstocks. Enable to run on boot with systemctl enable virtualstocks. See logs with journalctl -u virtualstocks.
 
 https://stackoverflow.com/questions/4018154/how-do-i-run-a-node-js-app-as-a-background-service
+
+# Updating Docker
+```
+docker build -t virtualstocks .
+
+docker tag virtualstocks thecodingwizard/virtualstocks
+
+docker push thecodingwizard/virtualstocks
+```
+
+On GCP:
+```
+sudo systemctl stop virtualstocks
+
+docker pull thecodingwizard/virtualstocks
+
+sudo systemctl start virtualstocks
+```
