@@ -6,6 +6,24 @@ Download the service account json file from Google Cloud Platform and store it a
 
 See here for more details: https://firebase.google.com/docs/firestore/quickstart
 
+# Generate SSL Certificates (Self Signed)
+https://stackoverflow.com/questions/21397809/create-a-trusted-self-signed-ssl-cert-for-localhost-for-use-with-express-node
+
+Key: `/keys/key.pem`
+Cert: /keys/cert.pem
+
+```
+> openssl req -x509 -newkey rsa:2048 -keyout keytmp.pem -out cert.pem -days 3650
+
+> openssl rsa -in keytmp.pem -out key.pem
+
+> mv key.pem keys
+
+> mv cert.pem keys
+
+> rm keytmp.pem
+```
+
 # Google Cloud Platform Setup
 Use Google Cloud Platform's free compute engine for free, scalable, reliable hosting.
 

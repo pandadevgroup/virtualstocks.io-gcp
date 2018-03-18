@@ -3,6 +3,12 @@ Object.defineProperty(exports, "__esModule", { value: true });
 const Fuse = require("fuse.js");
 const request = require("request");
 const express = require("express");
+const https = require("https");
+const fs = require("fs");
+const httpsOptions = {
+    key: fs.readFileSync('./keys/key.pem'),
+    cert: fs.readFileSync('./keys/cert.pem')
+};
 class SearchEngine {
     start() {
         this.setupSearch();
@@ -43,7 +49,8 @@ class SearchEngine {
             const results = this.fuse.search(search);
             res.send(results.slice(0, limit));
         });
-        app.listen(app.get("port"), () => console.log(`[Search Engine] Server listening on port ${app.get("port")}`));
+        const server = https.createServer(httpsOptions, app);
+        server.listen(app.get("port"), () => console.log(`[Search Engine] Server listening on port ${app.get("port")}`));
     }
 }
 exports.SearchEngine = SearchEngine;

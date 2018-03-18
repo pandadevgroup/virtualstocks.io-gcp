@@ -1,6 +1,13 @@
 import * as Fuse from "fuse.js";
 import * as request from "request";
 import * as express from "express";
+import * as https from "https";
+import * as fs from "fs";
+
+const httpsOptions = {
+	key: fs.readFileSync('./keys/key.pem'),
+	cert: fs.readFileSync('./keys/cert.pem')
+};
 
 export class SearchEngine {
 	fuse: Fuse;
@@ -52,7 +59,9 @@ export class SearchEngine {
 			const results = this.fuse.search(search);
 			res.send(results.slice(0, limit));
 		});
+
+		const server = https.createServer(httpsOptions, app);
 		
-		app.listen(app.get("port"), () => console.log(`[Search Engine] Server listening on port ${app.get("port")}`));
+		server.listen(app.get("port"), () => console.log(`[Search Engine] Server listening on port ${app.get("port")}`));
 	}
 }
