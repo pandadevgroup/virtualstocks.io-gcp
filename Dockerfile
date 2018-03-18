@@ -6,7 +6,7 @@ ADD . /app
 RUN npm install
 RUN npm run build
 
-EXPOSE 80
-ENV PORT 80
+EXPOSE 443
+ENV PORT 443
 
 CMD ["node", "build/index.js"]

@@ -41,7 +41,6 @@ Restart=always
 User=root
 Group=nogroup  
 Environment=PATH=/usr/bin:/usr/local/bin
-Environment=PORT=443
 
 [Install]
 WantedBy=multi-user.target
