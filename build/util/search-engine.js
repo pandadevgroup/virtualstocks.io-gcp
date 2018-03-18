@@ -31,6 +31,12 @@ class SearchEngine {
     setupServer() {
         const app = express();
         app.set("port", (process.env.PORT || 3000));
+        // CORS
+        app.use(function (req, res, next) {
+            res.header("Access-Control-Allow-Origin", "*");
+            res.header("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept");
+            next();
+        });
         app.get("/search/:search", (req, res) => {
             const search = req.params.search;
             const limit = req.query.limit || 5;
