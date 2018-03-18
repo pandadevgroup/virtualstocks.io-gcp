@@ -16,7 +16,7 @@ Use Google Cloud Platform's free compute engine for free, scalable, reliable hos
 Description=VirtualStocks server
 
 [Service]
-ExecStart=/usr/bin/docker run --name=virtualstocks -p 80:80 registry.hub.docker.com/thecodingwizard/virtualstocks
+ExecStart=/usr/bin/docker run --name=virtualstocks -p 80:80 thecodingwizard/virtualstocks
 ExecStop=/usr/bin/docker stop virtualstocks
 ExecStopPost=/usr/bin/docker rm virtualstocks
 Restart=always
