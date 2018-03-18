@@ -1,16 +1,15 @@
 {
-  "name": "virtualstocks.io-heroku",
+  "name": "virtualstocks.io-gcp",
   "version": "1.0.0",
   "description": "A polling app for virtualstocks.io that polls market data",
   "main": "build/index.js",
   "scripts": {
     "build": "./node_modules/.bin/tsc",
-    "start": "./node_modules/.bin/tsc && node build/index.js",
-    "postinstall": "npm run build"
+    "start": "./node_modules/.bin/tsc && node build/index.js"
   },
   "repository": {
     "type": "git",
-    "url": "https://github.com/virtualstocks/virtualstocks.io-heroku"
+    "url": "https://github.com/virtualstocks/virtualstocks.io-gcp"
   },
   "dependencies": {
     "@types/node": "^9.4.6",
