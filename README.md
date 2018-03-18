@@ -16,21 +16,20 @@ Use Google Cloud Platform's free compute engine for free, scalable, reliable hos
 Description=VirtualStocks server
 
 [Service]
-ExecStart=/usr/bin/node /home/USERNAME/virtualstocks.io-gcp/build/index.js
+ExecStart=/usr/bin/docker run --name=virtualstocks -p 80:80 registry.hub.docker.com/thecodingwizard/virtualstocks
+ExecStop=/usr/bin/docker stop virtualstocks
+ExecStopPost=/usr/bin/docker rm virtualstocks
 Restart=always
 User=root
 Group=nogroup  
 Environment=PATH=/usr/bin:/usr/local/bin
-Environment=NODE_ENV=production
-Environment=PORT=80
-WorkingDirectory=/home/USERNAME/virtualstocks.io-gcp
 
 [Install]
 WantedBy=multi-user.target
 ```
 
-Copy to /etc/systemd/system. Start with systemctl start virtualstocks. Enable to run on boot with systemctl enable virtualstocks. See logs with journalctl -u virtualstocks.
+Make sure to replace the docker registry URL with the appropriate command.
 
-Make sure you have run `yarn build`.
+Copy to /etc/systemd/system. Start with systemctl start virtualstocks. Enable to run on boot with systemctl enable virtualstocks. See logs with journalctl -u virtualstocks.
 
 https://stackoverflow.com/questions/4018154/how-do-i-run-a-node-js-app-as-a-background-service
